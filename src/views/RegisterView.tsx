@@ -27,7 +27,7 @@ export default function RegisterView() {
         if(isAxiosError(error) && error.response){
           toast.error(error.response.data.error);
           }
-        }
+      }
     }
 
 
