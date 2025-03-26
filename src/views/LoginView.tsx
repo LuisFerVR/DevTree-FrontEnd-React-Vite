@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { isAxiosError } from "axios";
 
 export default function LoginView() {
+
   const defaultValues : LoginForm = {
     email: "",
     password: "",
@@ -17,11 +18,16 @@ export default function LoginView() {
   const handleLogin = async (FormData:LoginForm) => {
     try {
       const {data} = await api.post(`/auth/login`, FormData);
-      toast.success(data.message);
+
+      console.log("logueado");
+      localStorage.setItem("AUTH_TOKEN", data);
+
     } catch (error) {
+      
       if(isAxiosError(error) && error.response){
         toast.error(error.response.data.error);
       }
+      
     }
   };
 
