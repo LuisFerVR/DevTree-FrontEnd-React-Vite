@@ -33,9 +33,13 @@ export default function ProfileView() {
         toast.error(e.message);
     },
     onSuccess: (data) => {
-        console.log(data);
-        toast.success(data);
-        queryClient.invalidateQueries({queryKey: ['user']});
+        queryClient.setQueryData(['user'],(prevData:User)=> {
+            return {
+                ...prevData,
+                image:data
+            }
+        });
+        toast.success('Imagen actualizada correctamente');
     }
   })
 

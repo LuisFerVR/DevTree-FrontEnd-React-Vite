@@ -45,7 +45,12 @@ export default function DevTree( { data } : DevTreeProps) {
                             <Outlet />
                         </div>
                         <div className="w-full md:w-96 bg-slate-800 px-5 py-10 space-y-6">
-
+                            <p className="text-4xl text-center text-white">{data.handle}</p>
+                            {data.image ?
+                                <img src={data.image} alt="Imagen de perfil" className="mx-auto max-w-[250px]"/> :
+                                <p className="text-lg text-center text-white font-black">No cuenta con foto de perfil</p>
+                            }
+                            <p className="text-lg text-center text-white font-black">{data.description}</p>
                         </div>
                     </div>
                 </main>

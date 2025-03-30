@@ -3,6 +3,7 @@ export type User = {
     email: string;
     handle: string;
     description: string;
+    image:string;
 }
 
 export type RegisterForm = User & {
