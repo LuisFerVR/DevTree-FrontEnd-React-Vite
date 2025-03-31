@@ -1,15 +1,21 @@
 import { Link, Outlet } from "react-router-dom";
 import NavigationTabs from "./NavigationTabs";
 import { Toaster } from "sonner";
-import { User } from "../types";
+import { SocialNetwork, User } from "../types";
+import { useEffect, useState } from "react";
+import DevTreeLink from "./DevTreeLink";
 
 type DevTreeProps = {
     data: User
 }
 
 export default function DevTree( { data } : DevTreeProps) {
+    const [enabledLinks, setEnabledLinks] = useState<SocialNetwork[]>(JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled));
+
+    useEffect(()=>{
+        setEnabledLinks(JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled));
+    },[data])
     
-    console.log('props',data);
     return (
     <>
             <header className="bg-slate-800 py-5">
@@ -51,6 +57,14 @@ export default function DevTree( { data } : DevTreeProps) {
                                 <p className="text-lg text-center text-white font-black">No cuenta con foto de perfil</p>
                             }
                             <p className="text-lg text-center text-white font-black">{data.description}</p>
+
+                            <div className="flex flex-col gap-5 mt-20 ">
+                                {
+                                    enabledLinks.map(link => (
+                                        <DevTreeLink key={link.name} link={link} />
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                 </main>

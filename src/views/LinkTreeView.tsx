@@ -1,6 +1,6 @@
 import DevTreeInput from "../components/DevTreeInput";
 import { social } from "../data/social"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { isValidUrl } from "../utils";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -23,12 +23,28 @@ export default function LinkTreeView() {
     }
   })
 
+  useEffect(()=> {
+    const updatedData = DevTreeLinks.map(item => {
+      const userLink = JSON.parse(user.links).find(link => link.name === item.name);
+      if(userLink){
+        return {...item,url:userLink.url, enabled:userLink.enabled}
+      }
+      return item;
+    })
+    setDevTreeLinks(updatedData);
+  }, []);
+
   const handleUrlChange = (e:  React.ChangeEvent<HTMLInputElement>) => {
 
     const updateLinks = DevTreeLinks.map(link=>link.name === e.target.name ? {...link,url:e.target.value} : link)
     setDevTreeLinks(updateLinks);
-    console.log(updateLinks);
-    
+
+    queryClient.setQueryData(['user'],(prevData:User)=>{
+      return {
+        ...prevData,
+        links: JSON.stringify(updateLinks)
+      }
+    })
   }
 
   const handleEnableLink = (socialNetwork:string) => {
