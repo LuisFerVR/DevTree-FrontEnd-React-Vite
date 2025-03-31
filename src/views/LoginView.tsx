@@ -33,8 +33,6 @@ export default function LoginView() {
 
   return (
     <>
-      <h1>LoginView</h1>
-
       <form
         onSubmit={handleSubmit(handleLogin)}
         className="bg-white px-5 py-20 rounded-lg space-y-10 mt-10"
@@ -85,7 +83,7 @@ export default function LoginView() {
       </form>
 
       <nav>
-        <Link to="/auth/register">
+        <Link to="/auth/register" className="text-white text-center text-lg block">
           ¿No tienes una cuenta? Clic aquí para crear una
         </Link>
       </nav>
