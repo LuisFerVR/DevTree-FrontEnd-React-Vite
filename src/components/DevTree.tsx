@@ -6,6 +6,7 @@ import { SortableContext, verticalListSortingStrategy, arrayMove} from "@dnd-kit
 import { SocialNetwork, User } from "../types";
 import { useEffect, useState } from "react";
 import DevTreeLink from "./DevTreeLink";
+import { useQueryClient } from "@tanstack/react-query";
 
 type DevTreeProps = {
     data: User
@@ -18,8 +19,30 @@ export default function DevTree( { data } : DevTreeProps) {
         setEnabledLinks(JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled));
     },[data]);
 
-    const handleDragEnd = ()=> {
-        console.log("drag end");
+    const queryClient = useQueryClient();
+
+    const handleDragEnd = (e: DragEndEvent)=> {
+        const {active, over} = e;
+        if (over && over.id) {
+            const prevIndex = enabledLinks.findIndex(link => link.id === active.id);
+            const newIndex = enabledLinks.findIndex(link => link.id === over?.id);
+
+            console.log(prevIndex, newIndex);
+            const newOrder = arrayMove(enabledLinks, prevIndex, newIndex);
+            setEnabledLinks(newOrder);
+
+            const disabledLinks: SocialNetwork = JSON.parse(data.links).filter((item: SocialNetwork) => !item.enabled);
+            const links = newOrder.concat(disabledLinks);
+
+
+            queryClient.setQueryData(['user'], (prevData:User) => {
+                return {
+                    ...prevData,
+                    links: JSON.stringify(links),
+                }
+            })
+        }
+
     }
     
     return (
@@ -46,7 +69,7 @@ export default function DevTree( { data } : DevTreeProps) {
                     <div className="flex justify-end">
                         <Link 
                             className="font-bold text-right text-slate-800 text-2xl"
-                            to={''}
+                            to={`/${data.handle}`}
                             target="_blank"
                             rel="noreferrer noopener"
                         >Visitar Mi Perfil/ {data.handle}</Link>

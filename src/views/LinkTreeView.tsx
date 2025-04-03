@@ -92,7 +92,7 @@ export default function LinkTreeView() {
             id:0,
             enabled: false
           }
-        }else if(link.id> indexToUpdated) {
+        }else if(link.id> indexToUpdated && (indexToUpdated !== 0 && link.id === 1)) {
           return {
             ...link,
             id: link.id - 1
@@ -122,7 +122,7 @@ export default function LinkTreeView() {
       }
       <button
         className="bg-cyan-400 p-2 text-lg  w-full uppercase text-slate-600 rounded font-bold"
-        onClick={()=>mutate(user)}>Guardar cambios</button>
+        onClick={()=>mutate(queryClient.getQueryData(['user']))}>Guardar cambios</button>
     </div>
   )
 }
