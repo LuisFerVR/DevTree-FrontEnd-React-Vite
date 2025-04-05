@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../components/ErrorMessage";
 import { LoginForm } from "../types";
@@ -13,14 +13,17 @@ export default function LoginView() {
     password: "",
   };
 
+  const navigate = useNavigate();
+
   const { register, handleSubmit, formState : {errors} } = useForm({ defaultValues });
 
   const handleLogin = async (FormData:LoginForm) => {
     try {
       const {data} = await api.post(`/auth/login`, FormData);
 
-      console.log("logueado");
       localStorage.setItem("AUTH_TOKEN", data);
+      navigate("/admin");
+      toast.success("Inicio de sesión exitoso");
 
     } catch (error) {
       
