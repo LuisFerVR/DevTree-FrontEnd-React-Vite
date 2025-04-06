@@ -25,7 +25,7 @@ export default function LinkTreeView() {
 
   useEffect(()=> {
     const updatedData = DevTreeLinks.map(item => {
-      const userLink = JSON.parse(user.links).find(link => link.name === item.name);
+      const userLink = JSON.parse(user.links).find((link: { name: string; }) => link.name === item.name);
       if(userLink){
         return {...item,url:userLink.url, enabled:userLink.enabled}
       }
@@ -122,7 +122,7 @@ export default function LinkTreeView() {
       }
       <button
         className="bg-cyan-400 p-2 text-lg  w-full uppercase text-slate-600 rounded font-bold"
-        onClick={()=>mutate(queryClient.getQueryData(['user']))}>Guardar cambios</button>
+        onClick={()=>mutate(queryClient.getQueryData(['user'])!)}>Guardar cambios</button>
     </div>
   )
 }
