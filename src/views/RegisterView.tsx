@@ -9,18 +9,17 @@ import api from "../config/axios";
 export default function RegisterView() {
   const location = useLocation();
   const navigate = useNavigate();
+  
 
   const InitValues : RegisterForm = {
       name: "",
       email: "",
-      handle: location?.state?.handle || '',
+      handle: location?.state || '',
       password: "",
       password_confirmation: ""
   }
     const { register, watch, reset, handleSubmit, formState: { errors } } = useForm({defaultValues: InitValues});
 
-    // console.log(errors);
-    
     const handleRegister = async (FormData:RegisterForm) => {
       try {
         const {data} = await api.post(`/auth/register`, FormData);
